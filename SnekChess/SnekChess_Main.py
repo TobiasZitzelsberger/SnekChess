@@ -42,29 +42,7 @@ def main():
                 running = False
         clock.tick(MAX_FPS)
 
-        if not piece_is_selected and gs.check:
-            for r in range(DIMENSION):
-                for c in range(DIMENSION):
-                    if (gs.whiteToMove and gs.board[r][c] == "wK") or (not gs.whiteToMove and gs.board[r][c] == "bK"):
-                        piece_is_selected = True
-                        if gs.whiteToMove:
-                            piece = "wK"
-                        else:
-                            piece = "bK"
-                        selected_c = c
-                        selected_r = r
-                        selected_piece = piece
-                        # Save movement options
-                        gs.calculate_move_options(r, c, piece)
-                        draw_game_state(screen, gs)
-                        # Highlight selected piece
-                        colors_move_log = [p.Color("blue"), p.Color("darkblue")]
-                        color_move_log = colors_move_log[((r + c) % 2)]
-                        p.draw.rect(screen, color_move_log, p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
-                        screen.blit(IMAGES[selected_piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
-                        p.display.flip()
-
-        if not piece_is_selected and not gs.check:
+        if not piece_is_selected:
             for selectPiece in p.event.get():
                 if selectPiece.type == p.MOUSEBUTTONUP:
                     mouse_x, mouse_y = p.mouse.get_pos()
@@ -73,7 +51,8 @@ def main():
                     piece = gs.board[r][c]
                     print(piece)
                     if piece != "--":
-                        if (piece.__contains__("b") and not gs.whiteToMove) or (piece.__contains__("w") and gs.whiteToMove):
+                        if (piece.__contains__("b") and not gs.whiteToMove) or (piece.__contains__("w")
+                                                                                and gs.whiteToMove):
                             piece_is_selected = True
                             selected_c = c
                             selected_r = r
@@ -102,7 +81,6 @@ def main():
                                       [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
                                       [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
                     gs.castling = False
-                    gs.en_passant = False
                     draw_game_state(screen, gs)
                     p.display.flip()
 
